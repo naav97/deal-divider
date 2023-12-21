@@ -1,0 +1,125 @@
+<?php
+include_once 'controller/HubspotController.php';
+
+$env = parse_ini_file('.env');
+
+$hubspot_obj = new HubspotController($env["ACCESS_TOKEN"]);
+
+$noResults = array(
+    'results' => array(
+        array(
+            "objectId" => 1,
+            "title" => "El negocio ya fue dividido.",
+            "properties" => array()
+        )
+    )
+);
+
+function created_date_format($date) {
+    $date_obj = date_create($date);
+    date_sub($date_obj, date_interval_create_from_date_string('5 hours'));
+    $date_format = date_format($date_obj, 'd/m/Y H:i:s');
+    return $date_format;
+}
+
+function format_results($item_2) {
+    return array(
+        "objectId" => $item_2['id'],
+        "title" => $item_2['properties']['nombre'] . " - Ver documento",
+        "link" => "https://21716028.hs-sites.com/documento-garante?code=".$item_2['properties']['code']."&id=".$item_2['id']."&deal_id=".$item_2['properties']['deal_id'],
+        "properties" => array(
+            array(
+                "label" => "Fecha",
+                "dataType" => "STRING",
+                "value" => created_date_format($item_2['properties']['hs_createdate'])
+            )                           
+        ),
+    );
+}
+
+//obtener lista de documentos
+function create_list($deal_id)
+{
+    global $hubspot_obj;   
+    global $noResults;
+
+    /*Listar documentos*/
+    $test_ids = [];
+    $respond = array();
+    $respond['results'] = array();
+    $dividido = null;
+    //con el deal_id buscamos los test drives asociados al negocio
+    $url = "https://api.hubapi.com/crm/v3/objects/deals/".$deal_id."?properties=dividido";
+
+    $resp = $hubspot_obj->api_v3($url, "GET");
+
+    if ($resp['success'] && $resp['status'] == 200) {
+        $data = json_decode($resp['data'], true);
+        print_r($data);
+        $props = $data['properties'];
+        if ($props['dividido'] != true) {
+            $dividido = false;
+        }
+        else {
+            $dividido = true;
+
+            $url = "https://api.hubapi.com/crm/v4/objects/deals/".$deal_id."/associations/deals";
+
+            $resp = $hubspot_obj->api_v3($url, "GET");
+
+            $results = json_decode($resp['data'], true)['results'];
+
+            foreach ($results as $key => $item) {                
+                array_push(
+                    $test_ids,
+                    array(
+                        "id" => $item['toObjectId'] . ""
+                    )
+                );
+            }
+
+            $url = "https://api.hubapi.com/crm/v3/objects/deals/batch/read?archived=false";
+            $body_arr_2 = [
+                "properties" => [
+                    "dealname",
+                    "hs_tcv"
+                ],
+                "inputs" => $test_ids
+            ];
+
+            $resp_2 = $hubspot_obj->api_v3($url, "POST", $body_arr_2);
+
+            if ($resp_2['success'] && $resp_2['status'] == 200) {
+                $data_2 = json_decode($resp_2['data'], true);
+                $results_2 = $data_2['results'];
+                foreach ($results_2 as $key_2 => $item_2) {
+                    $respond['results'][] = format_results($item_2); 
+                }
+            } else {
+                $respond = $noResults; 
+            }
+        }
+    } else {
+        $respond = $noResults; 
+    }
+    if ($dividido) {
+        $respond['primaryAction'] = array();
+    }
+    else {
+        $respond['primaryAction'] = array(
+            "type" => "IFRAME",
+            "width" => 768,
+            "height" => 748,
+            "uri" => "https://staging1.grows.company/mavesa/documento_negocio/get_form_G.php?&deal_id=" . $deal_id,
+            "label" => "Dividir negocio"
+        );
+    }
+    return $respond;
+    
+}
+
+header('Content-Type: application/json;charset=utf-8');
+//$deal_id = $_GET['associatedObjectId'];
+$deal_id = '16385417769';
+$results = create_list($deal_id);
+echo json_encode($results);
