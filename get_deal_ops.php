@@ -25,13 +25,13 @@ function created_date_format($date) {
 function format_results($item_2) {
     return array(
         "objectId" => $item_2['id'],
-        "title" => $item_2['properties']['nombre'] . " - Ver documento",
-        "link" => "https://21716028.hs-sites.com/documento-garante?code=".$item_2['properties']['code']."&id=".$item_2['id']."&deal_id=".$item_2['properties']['deal_id'],
+        "title" => $item_2['properties']['dealname'],
+        "link" => "#",
         "properties" => array(
             array(
-                "label" => "Fecha",
+                "label" => "Valor",
                 "dataType" => "STRING",
-                "value" => created_date_format($item_2['properties']['hs_createdate'])
+                "value" => $item_2['properties']['amount']
             )                           
         ),
     );
@@ -55,7 +55,6 @@ function create_list($deal_id)
 
     if ($resp['success'] && $resp['status'] == 200) {
         $data = json_decode($resp['data'], true);
-        print_r($data);
         $props = $data['properties'];
         if ($props['dividido'] != true) {
             $dividido = false;
@@ -82,7 +81,7 @@ function create_list($deal_id)
             $body_arr_2 = [
                 "properties" => [
                     "dealname",
-                    "hs_tcv"
+                    "amount"
                 ],
                 "inputs" => $test_ids
             ];
