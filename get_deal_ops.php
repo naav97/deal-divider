@@ -101,10 +101,7 @@ function create_list($deal_id)
     } else {
         $respond = $noResults; 
     }
-    if ($dividido) {
-        $respond['primaryAction'] = array();
-    }
-    else {
+    if (!$dividido) {
         $respond['primaryAction'] = array(
             "type" => "IFRAME",
             "width" => 768,
@@ -118,7 +115,7 @@ function create_list($deal_id)
 }
 
 header('Content-Type: application/json;charset=utf-8');
-//$deal_id = $_GET['associatedObjectId'];
-$deal_id = '16385417769';
+$deal_id = $_GET['associatedObjectId'];
+//$deal_id = '16385417769';
 $results = create_list($deal_id);
 echo json_encode($results);
