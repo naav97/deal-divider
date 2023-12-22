@@ -26,7 +26,8 @@ function format_results($item_2) {
     return array(
         "objectId" => $item_2['id'],
         "title" => $item_2['properties']['dealname'],
-        "link" => "#",
+        "created" => created_date_format($item_2['properties']['createdate']),
+        "priority" => "LOW",
         "properties" => array(
             array(
                 "label" => "Valor",
