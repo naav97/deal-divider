@@ -9,7 +9,7 @@ $noResults = array(
     'results' => array(
         array(
             "objectId" => 1,
-            "title" => "El negocio ya fue dividido.",
+            "title" => "Error al adquirir la información del negocio, pro favor recargue la página. Si el problema persiste por favor contacte al equipo Grows.",
             "properties" => array()
         )
     )
