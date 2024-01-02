@@ -52,7 +52,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
         ]
     );
 
-    array_push($inputs, $deal);
+    array_push($inputsArr, $deal);
 }
 
 $inputs = array("inputs" => $inputsArr);
