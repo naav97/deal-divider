@@ -107,7 +107,7 @@ function create_list($deal_id)
             "type" => "IFRAME",
             "width" => 768,
             "height" => 748,
-            "uri" => "https://staging1.grows.company/mavesa/documento_negocio/get_form_G.php?&deal_id=" . $deal_id,
+            "uri" => "https://colaborador.grows.pro/deal-divider/get_deal_ops.php?&deal_id=" . $deal_id,
             "label" => "Dividir negocio"
         );
     }
