@@ -61,10 +61,22 @@ $url = "https://api.hubapi.com/crm/v3/objects/deals/batch/create";
 $response = $hs_controller->api_v3($url, $method = "POST", $data = $inputs);
 /*echo '<br>DEAL<br>';
 print_r($response);*/
-if ($response['success'] && $response['status'] == 200) {
-        
+if ($response['success'] && $response['status'] == 201) {
+
 }else{
     print_r($response);
+    echo '<br>Ocurrió un error al actualizar el negocio';
+    die();
+}
+
+$body = array("properties" => array("dividido" => "true"));
+$url = "https://api.hubapi.com/crm/v3/objects/deals/".$filterData['deal_id'];
+$res = $hs_controller->api_v3($url, $method = "PATCH", $data = $body);
+
+if ($res['success'] && $res['status'] == 200) {
+    echo '<h2>Cuotas creadas con exito!</h2>';
+}else{
+    print_r($res);
     echo '<br>Ocurrió un error al actualizar el negocio';
     die();
 }
