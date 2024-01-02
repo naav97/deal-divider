@@ -28,7 +28,7 @@ $filterData = array_filter($_POST, function ($val) {
 //	die();
 //}
 
-$inputs = array();
+$inputsArr = array();
 
 for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
     $deal = array (
@@ -54,6 +54,8 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
 
     array_push($inputs, $deal);
 }
+
+$inputs = array("inputs" => $inputsArr);
 
 $url = "https://api.hubapi.com/crm/v3/objects/deals/batch/create";
 $response = $hs_controller->api_v3($url, $method = "POST", $data = $inputs);
