@@ -3,7 +3,7 @@ include_once 'controller/HubspotController.php';
 
 $env = parse_ini_file('.env');
 
-$hs_controller = new HubspotController($env["ACCESS_TOKEN_G"]);
+$hs_controller = new HubspotController($env["ACCESS_TOKEN"]);
 
 
 
