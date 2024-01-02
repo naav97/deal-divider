@@ -57,7 +57,7 @@ function create_list($deal_id)
     if ($resp['success'] && $resp['status'] == 200) {
         $data = json_decode($resp['data'], true);
         $props = $data['properties'];
-        if ($props['dividido'] != true) {
+        if ($props['dividido'] != "true") {
             $dividido = false;
         }
         else {
