@@ -73,7 +73,7 @@ if($deal_resp['success'] && $deal_resp['status'] == 200) {
                 <input id="imp-cuo-<?php echo $i; ?>" type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
             </fieldset>
             <?php } ?>
-            <span id="sum-warn">Los campos no suman la cantiodad correcta</span>
+            <span id="sum-warn">Los campos no suman la cantidad correcta.</span>
             <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>
