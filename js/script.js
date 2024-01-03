@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('sum-warn').style.display = 'none';
     const cuotas = document.getElementById('imp-cuo').value;
     const total = document.getElementById('imp-amo').value;
     for (let i = 1; i <= cuotas; i++) {
@@ -12,6 +13,8 @@ const checkTot = (cuotas, total) => {
     for (let i = 1; i <= cuotas; i++) {
         presTot += document.getElementById('imp-cuo-'+i).value;
     }
+    console.log(total);
+    console.log(presTot);
     if (presTot != total) {
         document.getElementById('sum-warn').style.display = 'block';
     }
