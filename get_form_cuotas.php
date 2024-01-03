@@ -74,7 +74,7 @@ if($deal_resp['success'] && $deal_resp['status'] == 200) {
             </fieldset>
             <?php } ?>
             <span id="sum-warn">Los campos no suman la cantiodad correcta</span>
-            <input type="submit" value="Dividir negocio">
+            <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>
 

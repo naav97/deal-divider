@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = document.getElementById('imp-amo').value;
     for (let i = 1; i <= cuotas; i++) {
         let inp = document.getElementById('imp-cuo-'+i);
-        inp.addEventListener('change', () => {checkTot(cuotas, total)});
+        inp.addEventListener('keyup', () => {checkTot(cuotas, total)});
     }
 });
 
@@ -17,8 +17,10 @@ const checkTot = (cuotas, total) => {
     console.log(presTot);
     if (presTot != total) {
         document.getElementById('sum-warn').style.display = 'block';
+        document.getElementById('imp-sub').disabled = true;
     }
     else {
         document.getElementById('sum-warn').style.display = 'none';
+        document.getElementById('imp-sub').disabled = false;
     }
 }
