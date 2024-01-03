@@ -64,18 +64,20 @@ if($deal_resp['success'] && $deal_resp['status'] == 200) {
             <!-- <input type="hidden" value="<?php echo $propD['hubspot_owner_id']; ?>" name="hubspot_owner_id"> -->
             <input type="hidden" value="<?php echo $deal_id; ?>" name="deal_id">
             <input type="hidden" value="<?php echo $propD['dealname']; ?>" name="deal_name">
-            <input type="hidden" value="<?php echo $propD['cuotas']; ?>" name="deal_num_cuo">
+            <input id="imp-cuo" type="hidden" value="<?php echo $propD['cuotas']; ?>" name="deal_num_cuo">
+            <input id="imp-amo" type="hidden" value="<?php echo $propD['amount']; ?>" name="deal_amo">
             <input type="hidden" value="<?php echo $propD['dealstage']; ?>" name="deal_stage">
             <?php for ($i = 1; $i <= $propD['cuotas']; $i++) { ?>
             <fieldset>
                 <span>Cuota <?php echo $i; ?></span>
-                <input type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
+                <input id="imp-cuo-<?php echo $i; ?>" type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
             </fieldset>
             <?php } ?>
+            <span id="sum-warn">Los campos no suman la cantiodad correcta</span>
             <input type="submit" value="Dividir negocio">
         </form>
     </div>
 
-    <!-- <script src="js/script-pj.js"></script> -->
+    <script src="js/script.js"></script>
 </body>
 </html>
