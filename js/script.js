@@ -13,9 +13,9 @@ const checkTot = (cuotas, total) => {
         presTot += document.getElementById('imp-cuo-'+i).value;
     }
     if (presTot != total) {
-        document.getEelementById('sum-warn').style.display = 'block';
+        document.getElementById('sum-warn').style.display = 'block';
     }
     else {
-        document.getEelementById('sum-warn').style.display = 'none';
+        document.getElementById('sum-warn').style.display = 'none';
     }
 }
