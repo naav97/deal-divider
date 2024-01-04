@@ -26,6 +26,7 @@ function format_results($item_2) {
     return array(
         "objectId" => $item_2['id'],
         "title" => $item_2['properties']['dealname'],
+        "link" => "https://app.hubspot.com/contacts/21549431/record/0-3/".$item_2['properties']['hs_object_id'],
         "created" => created_date_format($item_2['properties']['createdate']),
         "priority" => "LOW",
         "properties" => array(
@@ -33,7 +34,12 @@ function format_results($item_2) {
                 "label" => "Valor",
                 "dataType" => "STRING",
                 "value" => $item_2['properties']['amount']
-            )                           
+            ),
+            array(
+                "label" => "Fecha de pago",
+                "dataType" => "STRING",
+                "value" => $item_2['properties']['closedate']
+            )         
         ),
     );
 }
@@ -82,7 +88,9 @@ function create_list($deal_id)
             $body_arr_2 = [
                 "properties" => [
                     "dealname",
-                    "amount"
+                    "amount",
+                    "closedate",
+                    "hs_object_id"
                 ],
                 "inputs" => $test_ids
             ];
