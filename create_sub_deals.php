@@ -35,6 +35,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
         "properties" => [
             "amount" => $filterData['valor_cuota_'.$i],
             "dealname" => $filterData['deal_name']." cuota # ".$i,
+            "closedate" => $filterData['fecha_pago_cuota'.$i],
             "dealstage" => $filterData['deal_stage'],
         ],
         "associations" => [
