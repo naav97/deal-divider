@@ -26,6 +26,16 @@ if($deal_resp['success'] && $deal_resp['status'] == 200) {
     $propD = json_decode($deal_resp['data'], true)['properties'];
 }
 
+$pipelines = [];
+
+$url = 'https://api.hubapi.com/crm/v3/pipelines/deal';
+
+$resp = $hubspot_obj->api_v3($url, $method = "GET");
+
+if($resp['success'] && $resp['status'] == 200) {
+    $pipelines = json_decode($resp['data'], true)['results'];
+}
+
 //Obtener nombre sel asesor
 //$url_owner = 'https://api.hubapi.com/crm/v3/owners/' . $propD['hubspot_owner_id'];
 //
@@ -76,6 +86,13 @@ if($deal_resp['success'] && $deal_resp['status'] == 200) {
             </fieldset>
             <?php } ?>
             <span id="sum-warn">Los campos no suman la cantidad correcta.</span>
+            <label for="pipeline">Seleccione el pipelie al cual agregar las cuotas:</label>
+            <select name="pipeline" required>
+                <option value="">Seleccione un pipeline</option>
+                <?php foreach ($pipelines as &$pipe) { ?>
+                <option value="<?php echo $pipe['id']; ?>"><?php echo $pipe['label']; ?></option>
+                <?php } ?>
+            </select>
             <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>
