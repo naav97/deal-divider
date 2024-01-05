@@ -85,9 +85,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "closedate" => $filterData['fecha_pago_cuota_'.$i],
             "pipeline" => $filterData['pipeline'],
         ],
-        "associations" => [
-            createAsos($contactos,$filterData['deal_id'])
-        ]
+        "associations" => createAsos($contactos,$filterData['deal_id'])
     );
 
     array_push($inputsArr, $deal);
