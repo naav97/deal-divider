@@ -28,6 +28,39 @@ $filterData = array_filter($_POST, function ($val) {
 //	die();
 //}
 
+$contactos = [];
+
+$url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact';
+
+$res = $hs_controller->api_v3($url, $method = "GET");
+
+if ($res['success'] && $res['status'] == 200) {
+    $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
+}
+
+function createContactAsos($conts) {
+    $jsonres = array();
+
+    foreach ($conts as &$cont) {
+        $struct = array (
+            "to" => [
+                "id" => $cont['id'],
+            ],
+            "types" => [
+                [
+
+                    "associationCategory" => "HUBSPOT_DEFINED",
+                    "associationTypeId" => 3,
+                ],
+            ],
+        );
+
+        array_push($jsonres, $struct);
+    }
+
+    return $jsonres;
+}
+
 $inputsArr = array();
 
 for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
@@ -50,6 +83,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
                     ],
                 ],
             ],
+            createContactAsos($contactos)
         ]
     );
 
