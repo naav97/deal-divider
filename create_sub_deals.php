@@ -86,7 +86,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "pipeline" => $filterData['pipeline'],
         ],
         "associations" => [
-            createContactAsos($contactos,$filterData['deal_id'])
+            createAsos($contactos,$filterData['deal_id'])
         ]
     );
 
