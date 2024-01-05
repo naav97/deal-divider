@@ -38,8 +38,22 @@ if ($res['success'] && $res['status'] == 200) {
     $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
 }
 
-function createContactAsos($conts) {
+function createAsos($conts) {
     $jsonres = array();
+
+    $padre = array (
+        'to' => [
+            'id' => $filterData['deal_id'],
+        ],
+        'types' => [
+            [
+                'associationCategory' => 'HUBSPOT_DEFINED',
+                'associationTypeId' => 451,
+            ],
+        ],
+    );
+
+    array_push($jsonres, $padre);
 
     foreach ($conts as &$cont) {
         $struct = array (
@@ -72,17 +86,6 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "pipeline" => $filterData['pipeline'],
         ],
         "associations" => [
-            [
-                'to' => [
-                    'id' => $filterData['deal_id'],
-                ],
-                'types' => [
-                    [
-                        'associationCategory' => 'HUBSPOT_DEFINED',
-                        'associationTypeId' => 451,
-                    ],
-                ],
-            ],
             createContactAsos($contactos)
         ]
     );
