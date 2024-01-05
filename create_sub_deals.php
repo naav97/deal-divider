@@ -38,12 +38,12 @@ if ($res['success'] && $res['status'] == 200) {
     $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
 }
 
-function createAsos($conts) {
+function createAsos($conts, $dealId) {
     $jsonres = array();
 
     $padre = array (
         'to' => [
-            'id' => $filterData['deal_id'],
+            'id' => $dealId,
         ],
         'types' => [
             [
@@ -86,7 +86,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "pipeline" => $filterData['pipeline'],
         ],
         "associations" => [
-            createContactAsos($contactos)
+            createContactAsos($contactos,$filterData['deal_id'])
         ]
     );
 
