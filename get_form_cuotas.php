@@ -88,7 +88,9 @@ if($resp['success'] && $resp['status'] == 200) {
                 <tbody>
                     <?php for ($i = 1; $i <= $propD['cuotas']; $i++) { ?>
                     <tr>
-                        <td>Cuota <?php echo $i; ?></td>
+                        <td>
+                            <span>Cuota <?php echo $i; ?></span>
+                        </td>
                         <td>
                             <input id="imp-cuo-<?php echo $i; ?>" class="private-form__control" type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
                         </td>
