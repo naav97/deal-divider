@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Deal Divider Grows</title>
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- <div class="cabecera">
@@ -19,34 +19,43 @@
 
     <div class="container">
         <!-- <form enctype="multipart/form-data" method="POST" action="/mavesa/documento_negocio/get_form_send_pj.php"> -->
-        <form enctype="multipart/form-data" method="POST" action="#">
+        <form enctype="multipart/form-data" method="POST" action="https://colaborador.grows.pro/deal-divider/create_sub_deals.php">
             <!-- <input type="hidden" value="" name="hubspot_owner_id"> -->
-            <input type="hidden" value="16385417769" name="deal_id">
-            <input type="hidden" value="Test" name="deal_name">
-                        <fieldset>
-                <span>Cuota 1</span>
-                <input type="number" value="118">
-            </fieldset>
-                        <fieldset>
-                <span>Cuota 2</span>
-                <input type="number" value="118">
-            </fieldset>
-                        <fieldset>
-                <span>Cuota 3</span>
-                <input type="number" value="118">
-            </fieldset>
-                        <fieldset>
-                <span>Cuota 4</span>
-                <input type="number" value="118">
-            </fieldset>
-                        <fieldset>
-                <span>Cuota 5</span>
-                <input type="number" value="118">
-            </fieldset>
-                        <input type="submit" value="Dividir negocio">
+            <input type="hidden" value="" name="deal_id">
+            <input type="hidden" value="" name="deal_name">
+            <input id="imp-cuo" type="hidden" value="" name="deal_num_cuo">
+            <input id="imp-amo" type="hidden" value="" name="deal_amo">
+            <input type="hidden" value="" name="deal_stage">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>CUOTA</th>
+                        <th>MONTO</th>
+                        <th>FECHA DE PAGO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                    </tbody>
+            </table>
+            <span id="sum-warn">Los campos no suman la cantidad correcta.</span>
+            <!-- <label for="pipeline">Seleccione el pipelie al cual agregar las cuotas:</label>
+            <select name="pipeline" required>
+                <option value="">Seleccione un pipeline</option>
+                                <option value="17579067">Salud Pipeline</option>
+                                <option value="2652813">Co23 - Demo</option>
+                                <option value="default">Sales Pipeline</option>
+                                <option value="d74b3109-e177-43e5-b381-6d99d973b8b3">Salesforce - Default Pipeline</option>
+                                <option value="3332392">Inmobiliario</option>
+                                <option value="75e28846-ad0d-4be2-a027-5e1da6590b98">Ecommerce Pipeline</option>
+                                <option value="3354712">demo equipo 1</option>
+                                <option value="15933990">Fundación Compensar - Embudo de Admisión</option>
+                                <option value="12461933">Educación Pipeline</option>
+                                <option value="1523056">Ivoclar Vivadent</option>
+                            </select> -->
+            <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>
 
-    <!-- <script src="js/script-pj.js"></script> -->
+    <script src="js/script.js"></script>
 </body>
 </html>

@@ -56,7 +56,7 @@ if($resp['success'] && $resp['status'] == 200) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Deal Divider Grows</title>
-    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <!-- <div class="cabecera">
@@ -77,22 +77,37 @@ if($resp['success'] && $resp['status'] == 200) {
             <input id="imp-cuo" type="hidden" value="<?php echo $propD['cuotas']; ?>" name="deal_num_cuo">
             <input id="imp-amo" type="hidden" value="<?php echo $propD['amount']; ?>" name="deal_amo">
             <input type="hidden" value="<?php echo $propD['dealstage']; ?>" name="deal_stage">
-            <?php for ($i = 1; $i <= $propD['cuotas']; $i++) { ?>
-            <fieldset>
-                <span>Cuota <?php echo $i; ?></span>
-                <input id="imp-cuo-<?php echo $i; ?>" type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
-                <span>Fecha de pago</span>
-                <input type="date" name="fecha_pago_cuota_<?php echo $i; ?>">
-            </fieldset>
-            <?php } ?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>CUOTA</th>
+                        <th>MONTO</th>
+                        <th>FECHA DE PAGO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php for ($i = 1; $i <= $propD['cuotas']; $i++) { ?>
+                    <tr>
+                        <td>Cuota <?php echo $i; ?></td>
+                        <td>
+                            <input id="imp-cuo-<?php echo $i; ?>" class="private-form__control" type="number" value="<?php echo $propD['amount']/$propD['cuotas']; ?>" name="valor_cuota_<?php echo $i; ?>">
+                        </td>
+                        <!-- <span>Fecha de pago</span> -->
+                        <td>
+                            <input class="private-form__control" type="date" name="fecha_pago_cuota_<?php echo $i; ?>">
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
             <span id="sum-warn">Los campos no suman la cantidad correcta.</span>
-            <label for="pipeline">Seleccione el pipelie al cual agregar las cuotas:</label>
+            <!-- <label for="pipeline">Seleccione el pipelie al cual agregar las cuotas:</label>
             <select name="pipeline" required>
                 <option value="">Seleccione un pipeline</option>
                 <?php foreach ($pipelines as &$pipe) { ?>
                 <option value="<?php echo $pipe['id']; ?>"><?php echo $pipe['label']; ?></option>
                 <?php } ?>
-            </select>
+            </select> -->
             <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>
