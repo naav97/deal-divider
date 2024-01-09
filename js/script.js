@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= cuotas; i++) {
         let inp = document.getElementById('imp-cuo-'+i);
         inp.addEventListener('keyup', () => {checkTot(cuotas, total)});
+        inp.addEventListener('change', () => {checkTot(cuotas, total)});
     }
 });
 

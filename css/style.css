@@ -34,4 +34,40 @@ td {
 }
 
 td > * {
+    padding: 9px 10px;
+    border-radius: 3px;
+    border: 1px solid #cbd6e2;
+    font-size: 16px;
+    background-color: #f5f8fa;
+    color: #33475b;
+    display: block;
+    height: 40px;
+    line-height: 22px;
+    width: 100%;
+    font-family: Helvetica;
+}
+
+span {
+    border: 0px;
+}
+
+input#imp-sub {
+    background-color: #ff7a59;
+    border-color: #ff7a59;
+    color: #fff;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 11px 24px;
+    font-family: Helvetica;
+    font-weight: 500;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+input#imp-sub:hover {
+    background-color: #ff8f73;
+    border-color: #ff8f73;
+    color: #fff;
 }
