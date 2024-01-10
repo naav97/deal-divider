@@ -29,16 +29,18 @@ $filterData = array_filter($_POST, function ($val) {
 //}
 
 $contactos = [];
+$line_items = [];
 
-$url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact';
+$url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
 
 $res = $hs_controller->api_v3($url, $method = "GET");
 
 if ($res['success'] && $res['status'] == 200) {
     $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
+    $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
 }
 
-function createAsos($conts, $dealId) {
+function createAsos($conts, $liit, $dealId) {
     $jsonres = array();
 
     $padre = array (
@@ -72,6 +74,23 @@ function createAsos($conts, $dealId) {
         array_push($jsonres, $struct);
     }
 
+    foreach ($liit as &$li) {
+        $struct = array (
+            "to" => [
+                "id" => $li['id'],
+            ],
+            "types" => [
+                [
+
+                    "associationCategory" => "HUBSPOT_DEFINED",
+                    "associationTypeId" => 19,
+                ],
+            ],
+        );
+
+        array_push($jsonres, $struct);
+    }
+
     return $jsonres;
 }
 
@@ -85,7 +104,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "closedate" => $filterData['fecha_pago_cuota_'.$i],
             "pipeline" => $filterData['pipeline'],
         ],
-        "associations" => createAsos($contactos,$filterData['deal_id'])
+        "associations" => createAsos($contactos, $line_items, $filterData['deal_id'])
     );
 
     array_push($inputsArr, $deal);
