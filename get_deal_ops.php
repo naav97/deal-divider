@@ -18,7 +18,7 @@ $noResults = array(
 function created_date_format($date) {
     $date_obj = date_create($date);
     date_sub($date_obj, date_interval_create_from_date_string('5 hours'));
-    $date_format = date_format($date_obj, 'd/m/Y H:i:s');
+    $date_format = date_format($date_obj, 'd/F/Y');
     return $date_format;
 }
 
@@ -38,7 +38,7 @@ function format_results($item_2) {
             array(
                 "label" => "Fecha de pago",
                 "dataType" => "STRING",
-                "value" => $item_2['properties']['closedate']
+                "value" => created_date_format($item_2['properties']['closedate'])
             )         
         ),
     );
