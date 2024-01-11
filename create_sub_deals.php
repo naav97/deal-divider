@@ -125,11 +125,12 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "amount" => $filterData['valor_cuota_'.$i],
             "dealname" => $filterData['deal_name']." cuota # ".$i,
             "closedate" => $filterData['fecha_pago_cuota_'.$i],
-            "pipeline" => $filterData['pipeline'],
+            "pipeline" => "74755618",
+            "dealstage" => "143884940",
         ],
         "associations" => createAsos($contactos, $new_li, $filterData['deal_id'])
     );
-
+    print_r($deal);
     $res_cre_deal = $hs_controller->api_v3($url_cre_deal, $method = "POST", $data = $deal);
     if ($res_cre_deal['success'] && $res_cre_deal['status'] == 201) {
 
@@ -145,7 +146,7 @@ $url = "https://api.hubapi.com/crm/v3/objects/deals/".$filterData['deal_id'];
 $res = $hs_controller->api_v3($url, $method = "PATCH", $data = $body);
 
 if ($res['success'] && $res['status'] == 200) {
-    echo '<h2 style="font-style: Helvetica; text-align: center;margin-top: 25px;">Cuotas creadas con exito!</h2>';
+    echo '<h2 style="font-family: Helvetica; text-align: center;margin-top: 25px;">Cuotas creadas con exito!</h2>';
 }else{
     print_r($res);
     echo '<br>Ocurrió un error al actualizar el negocio';
