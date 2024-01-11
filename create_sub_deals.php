@@ -42,14 +42,15 @@ $body_li_d = array (
     ]
 );
 
-$res_li_d = $hs_controller->api_v3($url, $method = "POST", $data = $body_li_d);
+$res_li_d = $hs_controller->api_v3($url_li_d, $method = "POST", $data = $body_li_d);
 
 if ($res_li_d['success'] && $res_li_d['status'] == 200) {
     $line_items_details = json_decode($res_li_d['data'], true)['results'];
 }
-
-print_r($res_li_d);
-print_r($line_items_details);
+else {
+    print_r($res_li_d);
+    echo "<br>Ocurrio un error creando los articulos de linea.";
+}
 
 function createLineItems($li_d, $hs_c) {
     $new_li = [];
@@ -60,7 +61,6 @@ function createLineItems($li_d, $hs_c) {
     }
     $body = array("inputs" => $props);
     $resp = $hs_c->api_v3($url, $method = "POST", $data = $body);
-    print_r($body);
     if($resp['success'] && $resp['status'] == 201) {
         $new_li = json_decode($resp['data'], true)['results'];
     }
