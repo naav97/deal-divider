@@ -134,7 +134,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
     if ($res_cre_deal['success'] && $res_cre_deal['status'] == 201) {
 
     }else{
-        print_r($response);
+        print_r($res_cre_deal);
         echo '<br>Ocurrió un error al crear el negocio';
         die();
     }
