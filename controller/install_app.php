@@ -20,6 +20,64 @@ $app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_a
 $resp_token = first_token();
 createPropGroup($hs_controller);
 
+function createPipe($hs_c) {
+    $url = 'https://api.hubapi.com/crm/v3/pipelines/deals';
+    $body = array (
+        "displayOrder" => 0,
+        "label" => "Grows - Embudo de Facturación",
+        "stages" => [
+            array (
+                "metadata" => array (
+                    "probability" => "1.0"
+                ),
+                "displayOrder" => 1,
+                "label" => "Factura por emitir"
+            ),
+            array (
+                "metadata" => array (
+                    "probability" => "1.0"
+                ),
+                "displayOrder" => 2,
+                "label" => "Factura emitida"
+            ),
+            array (
+                "metadata" => array (
+                    "probability" => "1.0"
+                ),
+                "displayOrder" => 3,
+                "label" => "Factura pendiente de pago"
+            ),
+            array (
+                "metadata" => array (
+                    "probability" => "1.0"
+                ),
+                "displayOrder" => 4,
+                "label" => "Factura atrasada"
+            ),
+            array (
+                "metadata" => array (
+                    "probability" => "1.0"
+                ),
+                "displayOrder" => 5,
+                "label" => "Factura Pagada"
+            ),
+            array (
+                "metadata" => array (
+                    "probability" => "0.0"
+                ),
+                "displayOrder" => 6,
+                "label" => "Factura Anulada"
+            ),
+        ]
+    );
+    $res = $hs_c->api_v3($url, $method = "POST", $data = $body);
+    if (!$res['success'] || $res['status'] != 201) {
+        print_r($res);
+        echo "<br> Ocurrio un error al crear el pipeline";
+        die();
+    }
+}
+
 function createProps($hs_c) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/batch/create';
     $body = array (
@@ -56,6 +114,7 @@ function createProps($hs_c) {
         echo "<br> Ocurrio un error al crear las propiedades";
         die();
     }
+    createPipe($hs_c);
 }
 
 function createPropGroup($hs_c) {
