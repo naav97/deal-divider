@@ -48,6 +48,7 @@ if ($res_li_d['success'] && $res_li_d['status'] == 200) {
     $line_items_details = json_decode($res_li_d['data'], true)['results'];
 }
 
+print_r($res_li_d);
 print_r($line_items_details);
 
 function createLineItems($li_d, $hs_c) {
