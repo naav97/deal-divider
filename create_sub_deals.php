@@ -130,7 +130,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
         "associations" => createAsos($contactos, $new_li, $filterData['deal_id'])
     );
 
-    $res_cre_deal = $hs_controller->api_v3($url, $method = "POST", $data = $deal);
+    $res_cre_deal = $hs_controller->api_v3($url_cre_deal, $method = "POST", $data = $deal);
     if ($res_cre_deal['success'] && $res_cre_deal['status'] == 201) {
 
     }else{
