@@ -57,6 +57,7 @@ function createLineItems($li_d, $hs_c) {
     }
     $body = array("inputs" => $props);
     $resp = $hs_c->api_v3($url, $method = "POST", $data = $body);
+    print_r($resp);
     if($resp['success'] && $resp['status'] == 201) {
         $new_li = json_decode($resp['data'], true)['results'];
     }
@@ -120,7 +121,6 @@ function createAsos($conts, $liit, $dealId) {
 $url_cre_deal = 'https://api.hubapi.com/crm/v3/objects/deals';
 for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
     $new_li = createLineItems($line_items_details, $hs_controller);
-    print_r($new_li);
     $deal = array (
         "properties" => [
             "amount" => $filterData['valor_cuota_'.$i],
