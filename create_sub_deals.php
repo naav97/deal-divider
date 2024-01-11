@@ -120,6 +120,7 @@ function createAsos($conts, $liit, $dealId) {
 $url_cre_deal = 'https://api.hubapi.com/crm/v3/objects/deals';
 for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
     $new_li = createLineItems($line_items_details, $hs_controller);
+    print_r($new_li);
     $deal = array (
         "properties" => [
             "amount" => $filterData['valor_cuota_'.$i],
@@ -130,7 +131,6 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
         ],
         "associations" => createAsos($contactos, $new_li, $filterData['deal_id'])
     );
-    print_r($deal);
     $res_cre_deal = $hs_controller->api_v3($url_cre_deal, $method = "POST", $data = $deal);
     if ($res_cre_deal['success'] && $res_cre_deal['status'] == 201) {
 
