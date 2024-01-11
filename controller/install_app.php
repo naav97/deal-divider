@@ -1,4 +1,10 @@
 <?php
+include_once 'HubspotController.php';
+
+$env = parse_ini_file('../.env');
+
+$hs_controller = new HubspotController($env["ACCESS_TOKEN"]);
+
 //validación de código
 if (!isset($_GET['code'])) {
     echo 'Código no encontrado.';
@@ -11,7 +17,22 @@ $app_client_id = "0c7293a4-9fcc-45c4-897d-8c040a16ed28"; //client_id
 $app_client_secret = "8789b03f-1bd2-4921-8e31-ebb11fa79534"; //client_secret
 $app_redirect = "https://colaborador.grows.pro/install_app.php";//URL de redireccionamiento del App de Hubspot
 
-first_token();
+$resp_token = first_token();
+createPropGroup($hs_controller);
+
+function createPropGroup($hs_c) {
+    $url = 'https://api.hubapi.com/crm/v3/properties/deals/groups';
+    $body = array (
+        "name" => "infoFact",
+        "label" => "Grows - Información de Facturación",
+        "displayOrder" => -1
+    );
+    $res = $hs_c->api_v3($url, $method = "POST", $data = $body);
+    if (!$res['success'] || $res['status'] != 201) {
+        print_r($res);
+        echo "<br> Ocurrio un error el crear el grupo de propiedades";
+    }
+}
 
 function first_token()
 {
@@ -62,7 +83,7 @@ function first_token()
     } else {
         if ($httpcode == 200) {
             echo 'Instalación completa.<br>';
-            echo $response;
+            return $response;
         } else {
             echo 'Ocurrió un error durante la instalación.<br>';
             echo $response;
