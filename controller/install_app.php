@@ -20,6 +20,43 @@ $app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_a
 $resp_token = first_token();
 createPropGroup($hs_controller);
 
+function createProps($hs_c) {
+    $url = 'https://api.hubapi.com/crm/v3/properties/deals/batch/create';
+    $body = array (
+        "inputs" => [
+            array (
+                "label" => "Cuotas",
+                "type" => "number",
+                "fieldType" => "number",
+                "groupName" => "info_fact",
+                "name" => "cuotas"
+            ),
+            array (
+                "label" => "Dividido",
+                "type" => "enumeration",
+                "groupName" => "info_fact",
+                "name" => "dividido",
+                "options" => [
+                    array (
+                        "label" => "Si",
+                        "value" => "true"
+                    ),
+                    array (
+                        "label" => "No",
+                        "value" => "false"
+                    )
+                ]
+            )
+        ]
+    );
+    $res = $hs_c->api_v3($url, $method = "POST", $data = $body);
+    if (!$res['success'] || $res['status'] != 201) {
+        print_r($res);
+        echo "<br> Ocurrio un error al crear las propiedades";
+        die();
+    }
+}
+
 function createPropGroup($hs_c) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/groups';
     $body = array (
@@ -31,7 +68,9 @@ function createPropGroup($hs_c) {
     if (!$res['success'] || $res['status'] != 201) {
         print_r($res);
         echo "<br> Ocurrio un error el crear el grupo de propiedades";
+        die();
     }
+    createProps($hs_c);
 }
 
 function first_token()
