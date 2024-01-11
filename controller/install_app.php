@@ -23,7 +23,7 @@ createPropGroup($hs_controller);
 function createPropGroup($hs_c) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/groups';
     $body = array (
-        "name" => "infoFact",
+        "name" => "info_fact",
         "label" => "Grows - Información de Facturación",
         "displayOrder" => -1
     );
