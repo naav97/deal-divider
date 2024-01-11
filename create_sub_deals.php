@@ -57,7 +57,7 @@ function createLineItems($li_d, $hs_c) {
     }
     $body = array("inputs" => $props);
     $resp = $hs_c->api_v3($url, $method = "POST", $data = $body);
-    print_r($resp);
+    print_r($body);
     if($resp['success'] && $resp['status'] == 201) {
         $new_li = json_decode($resp['data'], true)['results'];
     }
