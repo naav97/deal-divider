@@ -15,7 +15,7 @@ $code = $_GET['code'];
 //datos de configuración de la aplicación
 $app_client_id = "0c7293a4-9fcc-45c4-897d-8c040a16ed28"; //client_id
 $app_client_secret = "8789b03f-1bd2-4921-8e31-ebb11fa79534"; //client_secret
-$app_redirect = "https://colaborador.grows.pro/install_app.php";//URL de redireccionamiento del App de Hubspot
+$app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_app.php";//URL de redireccionamiento del App de Hubspot
 
 $resp_token = first_token();
 createPropGroup($hs_controller);
