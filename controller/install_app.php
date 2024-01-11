@@ -34,6 +34,7 @@ function createProps($hs_c) {
             array (
                 "label" => "Dividido",
                 "type" => "enumeration",
+                "fieldType" => "select",
                 "groupName" => "info_fact",
                 "name" => "dividido",
                 "options" => [
