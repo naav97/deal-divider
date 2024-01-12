@@ -20,6 +20,34 @@ $app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_a
 $resp_token = first_token();
 createPropGroup($hs_controller);
 
+function savePipeDetails($pipeRes) {
+    $data = json_decode($pipeRes, true);
+    $pipeid = "PIPE_ID=".$data['id'];
+    $stageid = "STAGE_ID=";
+    foreach($data['stages'] as &$st) {
+        if($st['label'] == "Factura emitida") {
+            $stageid = $stageid.$st['id'];
+            break;
+        }
+    }
+    if(file_exists('../.env')) {
+        $conte = file_get_contents('../.env');
+        if(strpos($conte, 'PIPE_ID') != false) {
+            $conte = preg_replace('/(^|\n)PIPE_ID=.*/', "$1".$pipeid, $conte);
+        }
+        else {
+            $conte = $conte."\n".$pipeid;
+        }
+        if(strpos($conte, 'STAGE_ID') != false) {
+            $conte = preg_replace('/(^|\n)STAGE_ID=.*/', "$1".$stageid, $conte);
+        }
+        else {
+            $conte = $conte."\n".$stageid;
+        }
+        file_put_contents('../.env', $conte);
+    }
+}
+
 function createPipe($hs_c) {
     $url = 'https://api.hubapi.com/crm/v3/pipelines/deals';
     $body = array (
@@ -76,6 +104,7 @@ function createPipe($hs_c) {
         echo "<br> Ocurrio un error al crear el pipeline";
         die();
     }
+    savePipeDetails($res['data']);
 }
 
 function createProps($hs_c) {
