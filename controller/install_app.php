@@ -20,7 +20,7 @@ $app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_a
 first_token();
 //createPropGroup($hs_controller);
 
-function saveDetailsToDB($pipeRes, $token, $portalId) {
+function saveDetailsToDB($pipeRes, $token, $portalId, $refTok) {
 
     global $env;
 
@@ -41,9 +41,9 @@ function saveDetailsToDB($pipeRes, $token, $portalId) {
     if($conn->connect_error) {
         die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
     }
-    $sql = "INSERT INTO det_client (PortalID, OAToken, PipelineID, StageID) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO det_client (PortalID, OAToken, RefToken, PipelineID, StageID) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $portalId, $token, $pipeid, $stageid);
+    $stmt->bind_param("ssss", $portalId, $token, $refTok, $pipeid, $stageid);
     if($stmt->execute()) {
         echo "<br>Instalacion completada correctamente";
     }
@@ -54,7 +54,7 @@ function saveDetailsToDB($pipeRes, $token, $portalId) {
     $conn->close();
 }
 
-function createPipe($hs_c, $token, $portalId) {
+function createPipe($hs_c, $token, $portalId, $refTok) {
     $url = 'https://api.hubapi.com/crm/v3/pipelines/deals';
     $body = array (
         "displayOrder" => 0,
@@ -110,10 +110,10 @@ function createPipe($hs_c, $token, $portalId) {
         echo "<br> Ocurrio un error al crear el pipeline";
         die();
     }
-    saveDetailsToDB($res['data'], $token, $portalId);
+    saveDetailsToDB($res['data'], $token, $portalId, $refTok);
 }
 
-function createProps($hs_c, $token, $portalId) {
+function createProps($hs_c, $token, $portalId, $refTok) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/batch/create';
     $body = array (
         "inputs" => [
@@ -149,10 +149,10 @@ function createProps($hs_c, $token, $portalId) {
         echo "<br> Ocurrio un error al crear las propiedades";
         die();
     }
-    createPipe($hs_c, $token, $portalId);
+    createPipe($hs_c, $token, $portalId, $refTok);
 }
 
-function createPropGroup($hs_c, $token, $portalId) {
+function createPropGroup($hs_c, $token, $portalId, $refTok) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/groups';
     $body = array (
         "name" => "info_fact",
@@ -165,18 +165,18 @@ function createPropGroup($hs_c, $token, $portalId) {
         echo "<br> Ocurrio un error el crear el grupo de propiedades";
         die();
     }
-    createProps($hs_c, $token, $portalId);
+    createProps($hs_c, $token, $portalId, $refTok);
 }
 
 function obtener_portal_id ($tok_res) {
     $url = "https://api.hubapi.com/integrations/v1/me";
     $data_token = json_decode($tok_res, true);
-    $hs_c = new HubspotController($data_token['access_token']);
+    $hs_c = new HubspotController("Bearer ".$data_token['access_token']);
     $res = $hs_c->api_v1($url, $method = "GET");
     if ($res['success'] && $res['status'] == 200) {
         $data_cliente = json_decode($res, true);
         print_r($data_cliente['portalId']);
-        createPropGroup($hs_c, $data_token['access_token'], $data_cliente['portalId']);
+        createPropGroup($hs_c, $data_token['access_token'], $data_cliente['portalId'], $data_token['refresh_token']);
     }
     else {
         print_r($res);
