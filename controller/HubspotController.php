@@ -56,7 +56,6 @@ class HubspotController {
                 CURLOPT_POSTFIELDS => $payload
             );
         }
-        print_r($this->api_token);
         curl_setopt_array($ch, $body_arr);
 
         $response = curl_exec($ch);

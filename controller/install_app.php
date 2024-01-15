@@ -174,7 +174,7 @@ function obtener_portal_id ($tok_res) {
     $hs_c = new HubspotController("Bearer ".$data_token['access_token']);
     $res = $hs_c->api_v1($url, $method = "GET");
     if ($res['success'] && $res['status'] == 200) {
-        $data_cliente = json_decode($res, true);
+        $data_cliente = json_decode($res['data'], true);
         print_r($data_cliente['portalId']);
         createPropGroup($hs_c, $data_token['access_token'], $data_cliente['portalId'], $data_token['refresh_token']);
     }
