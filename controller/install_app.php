@@ -17,10 +17,13 @@ $app_client_id = "0c7293a4-9fcc-45c4-897d-8c040a16ed28"; //client_id
 $app_client_secret = "8789b03f-1bd2-4921-8e31-ebb11fa79534"; //client_secret
 $app_redirect = "https://colaborador.grows.pro/deal-divider/controller/install_app.php";//URL de redireccionamiento del App de Hubspot
 
-$resp_token = first_token();
-createPropGroup($hs_controller);
+first_token();
+//createPropGroup($hs_controller);
 
-function savePipeDetails($pipeRes) {
+function saveDetailsToDB($pipeRes, $token, $portalId) {
+
+    global $env;
+
     $data = json_decode($pipeRes, true);
     $pipeid = "PIPE_ID=".$data['id'];
     $stageid = "STAGE_ID=";
@@ -30,25 +33,28 @@ function savePipeDetails($pipeRes) {
             break;
         }
     }
-    if(file_exists('../.env')) {
-        $conte = file_get_contents('../.env');
-        if(strpos($conte, 'PIPE_ID') != false) {
-            $conte = preg_replace('/(^|\n)PIPE_ID=.*/', "$1".$pipeid, $conte);
-        }
-        else {
-            $conte = $conte."\n".$pipeid;
-        }
-        if(strpos($conte, 'STAGE_ID') != false) {
-            $conte = preg_replace('/(^|\n)STAGE_ID=.*/', "$1".$stageid, $conte);
-        }
-        else {
-            $conte = $conte."\n".$stageid;
-        }
-        file_put_contents('../.env', $conte);
+    $server = "138.197.104.102";
+    $user = "usuario_db";
+    $pass = $env['DB_PASS'];
+    $db = "clientes";
+    $conn = new mysqli($server, $user, $pass, $db);
+    if($conn->connect_error) {
+        die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
     }
+    $sql = "INSERT INTO det_client (PortalID, OAToken, PipelineID, StageID) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $portalId, $token, $pipeid, $stageid);
+    if($stmt->execute()) {
+        echo "<br>Instalacion completada correctamente";
+    }
+    else {
+        echo "Error instalado la aplicacion: ".$conn->error;
+    }
+    $stmt->close();
+    $conn->close();
 }
 
-function createPipe($hs_c) {
+function createPipe($hs_c, $token, $portalId) {
     $url = 'https://api.hubapi.com/crm/v3/pipelines/deals';
     $body = array (
         "displayOrder" => 0,
@@ -104,10 +110,10 @@ function createPipe($hs_c) {
         echo "<br> Ocurrio un error al crear el pipeline";
         die();
     }
-    savePipeDetails($res['data']);
+    saveDetailsToDB($res['data'], $token, $portalId);
 }
 
-function createProps($hs_c) {
+function createProps($hs_c, $token, $portalId) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/batch/create';
     $body = array (
         "inputs" => [
@@ -143,10 +149,10 @@ function createProps($hs_c) {
         echo "<br> Ocurrio un error al crear las propiedades";
         die();
     }
-    createPipe($hs_c);
+    createPipe($hs_c, $token, $portalId);
 }
 
-function createPropGroup($hs_c) {
+function createPropGroup($hs_c, $token, $portalId) {
     $url = 'https://api.hubapi.com/crm/v3/properties/deals/groups';
     $body = array (
         "name" => "info_fact",
@@ -159,7 +165,24 @@ function createPropGroup($hs_c) {
         echo "<br> Ocurrio un error el crear el grupo de propiedades";
         die();
     }
-    createProps($hs_c);
+    createProps($hs_c, $token, $portalId);
+}
+
+function obtener_portal_id ($tok_res) {
+    $url = "https://api.hubapi.com/integrations/v1/me";
+    $data_token = json_decode($tok_res['data'], true);
+    $hs_c = new HubspotController($data_token['access_token']);
+    $res = $hs_c->api_v1($url, $method = "GET");
+    if ($res['success'] && $res['status'] == 200) {
+        $data_cliente = json_decode($res, true);
+        print_r($data_cliente['portalId']);
+        createPropGroup($hs_c, $data_token['access_token'], $data_cliente['portalId']);
+    }
+    else {
+        print_r($res);
+        echo "<br> Ocurrio un error al obtener la información del cliente";
+        die();
+    }
 }
 
 function first_token()
@@ -210,8 +233,7 @@ function first_token()
         );
     } else {
         if ($httpcode == 200) {
-            echo 'Instalación completa.<br>';
-            return $response;
+            obtener_portal_id($response);
         } else {
             echo 'Ocurrió un error durante la instalación.<br>';
             echo $response;
