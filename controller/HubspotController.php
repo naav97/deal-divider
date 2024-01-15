@@ -109,12 +109,12 @@ class HubspotController {
             )
         );
         if ($method == "POST" || $method == "PATCH") {
-	    if($content_type != "multipart/form-data") {
-		$payload = json_encode($data);
-	    }
-	    else {
-		$payload = $data;
-	    }
+            if($content_type != "multipart/form-data") {
+                $payload = json_encode($data);
+            }
+            else {
+                $payload = $data;
+            }
             $body_arr = array(
                 CURLOPT_URL => $url,
                 CURLOPT_SSL_VERIFYHOST => false,
