@@ -170,7 +170,7 @@ function createPropGroup($hs_c, $token, $portalId) {
 
 function obtener_portal_id ($tok_res) {
     $url = "https://api.hubapi.com/integrations/v1/me";
-    $data_token = json_decode($tok_res['data'], true);
+    $data_token = json_decode($tok_res, true);
     $hs_c = new HubspotController($data_token['access_token']);
     $res = $hs_c->api_v1($url, $method = "GET");
     if ($res['success'] && $res['status'] == 200) {
