@@ -18,7 +18,7 @@ $portal_id = $filterData['portal_id'];
 $contactos = [];
 $line_items = [];
 
-function fisrtTry($filterData, $hs_controller) {
+function firstTry($filterData, $hs_controller) {
     global $contactos, $line_items;
     $url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
 
