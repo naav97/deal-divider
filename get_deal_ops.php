@@ -1,9 +1,14 @@
 <?php
 include_once 'controller/HubspotController.php';
+include_once 'controller/DBController.php';
+
+$portal_id = $_GET['portalId'];
 
 $env = parse_ini_file('.env');
 
-$hubspot_obj = new HubspotController($env["ACCESS_TOKEN"]);
+$db_cont = new DBController($env['DB_PASS']);
+
+$hubspot_obj = new HubspotController($db_cont->getToken($portal_id));
 
 $noResults = array(
     'results' => array(

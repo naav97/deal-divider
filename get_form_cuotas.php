@@ -1,7 +1,9 @@
 <?php
 include_once 'controller/HubspotController.php';
 include_once 'controller/HelperController.php';
+include_once 'controller/DBController.php';
 
+$portal_id = $_GET['portalId'];
 $deal_id = $_GET['deal_id'];
 //$deal_id = "16385417769";
 
@@ -9,7 +11,9 @@ $propD = [];
 
 $env = parse_ini_file('.env');
 
-$hubspot_obj = new HubspotController($env["ACCESS_TOKEN"]);
+$db_cont = new DBController($env['DB_PASS']);
+
+$hubspot_obj = new HubspotController($db_cont->getToken($portal_id));
 //$helper_obj = new HelperController($env["ACCESS_TOKEN"]);
 
 function generate_property_params($properties_list) {

@@ -3,8 +3,6 @@ include_once 'HubspotController.php';
 
 $env = parse_ini_file('../.env');
 
-$hs_controller = new HubspotController($env["ACCESS_TOKEN"]);
-
 //validación de código
 if (!isset($_GET['code'])) {
     echo 'Código no encontrado.';
@@ -25,11 +23,11 @@ function saveDetailsToDB($pipeRes, $token, $portalId, $refTok) {
     global $env;
 
     $data = json_decode($pipeRes, true);
-    $pipeid = "PIPE_ID=".$data['id'];
-    $stageid = "STAGE_ID=";
+    $pipeid = $data['id'];
+    $stageid = "";
     foreach($data['stages'] as &$st) {
         if($st['label'] == "Factura emitida") {
-            $stageid = $stageid.$st['id'];
+            $stageid = $st['id'];
             break;
         }
     }
