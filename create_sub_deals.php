@@ -6,10 +6,6 @@ $env = parse_ini_file('.env');
 
 $db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
 
-$hs_controller = new HubspotController("Bearer ".$db_cont->getProperty($portal_id, "OAToken"));
-
-
-
 $filterData = array_filter($_POST, function ($val) {
 	return !empty($val);
 });
@@ -17,6 +13,8 @@ $filterData = array_filter($_POST, function ($val) {
 $portal_id = $filterData['portal_id'];
 $contactos = [];
 $line_items = [];
+
+$hs_controller = new HubspotController("Bearer ".$db_cont->getProperty($portal_id, "OAToken"));
 
 function firstTry($filterData, $hs_controller) {
     global $contactos, $line_items;
