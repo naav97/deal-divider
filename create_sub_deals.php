@@ -24,6 +24,8 @@ function firstTry($filterData, $hs_controller) {
 
     $res = $hs_controller->api_v3($url, $method = "GET");
 
+    print_r($res);
+
     if ($res['success'] && $res['status'] == 200) {
         $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
         $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
