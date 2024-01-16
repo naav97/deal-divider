@@ -48,6 +48,7 @@ function mainp($filterData, $dbc, $portal_id, $hs_c) {
         }
     }
     echo "No se pudo completar la operacion";
+    print_r($ret);
     die();
 }
 
