@@ -13,7 +13,7 @@ $env = parse_ini_file('.env');
 
 $db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
 
-$hubspot_obj = new HubspotController($db_cont->getProperty($portal_id, "OAToken"));
+$hubspot_obj = new HubspotController("Bearer ".$db_cont->getProperty($portal_id, "OAToken"));
 //$helper_obj = new HelperController($env["ACCESS_TOKEN"]);
 
 function generate_property_params($properties_list) {
