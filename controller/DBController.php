@@ -26,9 +26,9 @@ class DBController {
         if($conn->connect_error) {
             die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
         }
-        $sql = "SELECT ? FROM det_client WHERE PortalID=?";
+        $sql = "SELECT ".$prop." FROM det_client WHERE PortalID=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $prop, $portal_id);
+        $stmt->bind_param("s", $portal_id);
         $stmt->execute();
         $stmt->bind_result($token);
         if($stmt->fetch()) {
