@@ -1,6 +1,6 @@
 <?php
 
-include_once 'HubspotController';
+include_once 'HubspotController.php';
 
 class DBController {
 
@@ -26,7 +26,7 @@ class DBController {
         if($conn->connect_error) {
             die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
         }
-        $sql = "SELECT ? FROM det_client WHERE PortalID='?'";
+        $sql = "SELECT ? FROM det_client WHERE PortalID=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $prop, $portal_id);
         $stmt->execute();
