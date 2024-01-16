@@ -46,7 +46,7 @@ class DBController {
         $url = "https://api.hubapi.com/oauth/v1/token";
         $body = "grant_type=refresh_token&client_id=".$this->client_id."&client_secret=".$this->client_secret."&refresh_token=".$refTok;
         $hs_c = new HubspotController();
-        $res = $hs_c->api_v1($url, $method = "POST", $data = $body);
+        $res = $hs_c->getNewToken($url, $data = $body);
         $newData = [];
         if($res['success'] && $res['status'] == 200) {
             $newData = json_decode($res['data'], true);

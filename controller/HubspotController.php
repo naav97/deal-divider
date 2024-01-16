@@ -81,6 +81,52 @@ class HubspotController {
             );
         }
     }
+    function getNewToken($url, $data = "")
+    {
+
+        $ch = curl_init();
+
+        $body_arr = array(
+            CURLOPT_URL => $url,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+                "accept: application/json",
+                'Content-Type:application/x-www-form-urlencoded'
+            ),
+            CURLOPT_POSTFIELDS => $data
+        );
+        curl_setopt_array($ch, $body_arr);
+
+        $response = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+
+        curl_close($ch);
+
+        if ($err) {
+            return array(
+                "success" => false,
+                "vid" => 0,
+                "msg" => "Erro de conexión curl",
+                "error" => $err,
+                "data" => $response,
+            );
+        } else {
+            return array(
+                "success" => true,
+                "data" => $response,
+                "msg" => "Exito",
+                "status" => $httpcode
+            );
+        }
+    }
     function api_v3($url, $method = "GET", $data = array(), $after = "", $content_type = "application/json")
     {
         global $api_token;
