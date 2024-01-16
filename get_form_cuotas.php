@@ -11,34 +11,62 @@ $propD = [];
 
 $env = parse_ini_file('.env');
 
-$db_cont = new DBController($env['DB_PASS']);
+$db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
 
-$hubspot_obj = new HubspotController($db_cont->getToken($portal_id));
+$hubspot_obj = new HubspotController($db_cont->getProperty($portal_id, "OAToken"));
 //$helper_obj = new HelperController($env["ACCESS_TOKEN"]);
 
 function generate_property_params($properties_list) {
     return '?properties='.join('%2C', $properties_list);
 }
 
-$deal_params = generate_property_params(["amount","cuotas","dealname","dealstage"]);
+function get_deal_props($deal_id, $hubspot_obj) {
+    $deal_params = generate_property_params(["amount","cuotas","dealname","dealstage"]);
 
-$urlD = 'https://api.hubapi.com/crm/v3/objects/deals/'.$deal_id.$deal_params.'&archived=false';
+    $urlD = 'https://api.hubapi.com/crm/v3/objects/deals/'.$deal_id.$deal_params.'&archived=false';
 
-$deal_resp = $hubspot_obj->api_v3($urlD, $method = "GET");
+    $deal_resp = $hubspot_obj->api_v3($urlD, $method = "GET");
 
-if($deal_resp['success'] && $deal_resp['status'] == 200) {
-    $propD = json_decode($deal_resp['data'], true)['properties'];
+    if($deal_resp['success'] && $deal_resp['status'] == 200) {
+        return json_decode($deal_resp['data'], true)['properties'];
+    }
+    elseif($deal_resp['success'] && $deal_resp['status'] == 401) {
+        return "OT";
+    }
+    else {
+        echo "Error obtenindo la informacion del negocio";
+        die();
+    }
 }
 
-$pipelines = [];
-
-$url = 'https://api.hubapi.com/crm/v3/pipelines/deal';
-
-$resp = $hubspot_obj->api_v3($url, $method = "GET");
-
-if($resp['success'] && $resp['status'] == 200) {
-    $pipelines = json_decode($resp['data'], true)['results'];
+function mainp($deal_id, $dbc, $portal_id, $hs_c) {
+    $i = 0;
+    $ret = "";
+    while($i < 3) {
+        $ret = get_deal_props($deal_id, $hs_c);
+        if($ret == "OT") {
+            $dbc->updateToken($portal_id);
+            $i = $i + 1;
+        }
+        else {
+            return $ret;
+        }
+    }
+    echo "No se pudo completar la operacion";
+    die();
 }
+
+$propD = mainp($deal_id, $db_cont, $portal_id, $hubspot_obj);
+
+//$pipelines = [];
+//
+//$url = 'https://api.hubapi.com/crm/v3/pipelines/deal';
+//
+//$resp = $hubspot_obj->api_v3($url, $method = "GET");
+//
+//if($resp['success'] && $resp['status'] == 200) {
+//    $pipelines = json_decode($resp['data'], true)['results'];
+//}
 
 //Obtener nombre sel asesor
 //$url_owner = 'https://api.hubapi.com/crm/v3/owners/' . $propD['hubspot_owner_id'];
@@ -107,13 +135,6 @@ if($resp['success'] && $resp['status'] == 200) {
                 </tbody>
             </table>
             <span id="sum-warn">Los campos no suman la cantidad correcta.</span>
-            <!-- <label for="pipeline">Seleccione el pipelie al cual agregar las cuotas:</label>
-            <select name="pipeline" required>
-                <option value="">Seleccione un pipeline</option>
-                <?php foreach ($pipelines as &$pipe) { ?>
-                <option value="<?php echo $pipe['id']; ?>"><?php echo $pipe['label']; ?></option>
-                <?php } ?>
-            </select> -->
             <input id="imp-sub" type="submit" value="Dividir negocio">
         </form>
     </div>

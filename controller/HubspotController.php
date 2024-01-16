@@ -4,7 +4,7 @@ class HubspotController {
 
     public $api_token;
 
-    public function __construct($pApiToken) {
+    public function __construct($pApiToken = "no-auth") {
         $this->api_token = $pApiToken;
     }
 

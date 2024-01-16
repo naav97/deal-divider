@@ -6,9 +6,9 @@ $portal_id = $_GET['portalId'];
 
 $env = parse_ini_file('.env');
 
-$db_cont = new DBController($env['DB_PASS']);
+$db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
 
-$hubspot_obj = new HubspotController($db_cont->getToken($portal_id));
+$hubspot_obj = new HubspotController($db_cont->getProperty($portal_id, "OAToken"));
 
 $noResults = array(
     'results' => array(
@@ -112,7 +112,11 @@ function create_list($deal_id)
                 $respond = $noResults; 
             }
         }
-    } else {
+    }
+    elseif($resp['success'] && $resp['status'] == 401) {
+        return "OT";
+    } 
+    else {
         $respond = $noResults; 
     }
     if (!$dividido) {
@@ -128,8 +132,25 @@ function create_list($deal_id)
     
 }
 
+function mainp($deal_id, $dbc, $portal_id) {
+    $i = 0;
+    $ret = "";
+    while($i < 3) {
+        $ret = create_list($deal_id);
+        if($ret == "OT") {
+            $dbc->updateToken($portal_id);
+            $i = $i + 1;
+        }
+        else {
+            return $ret;
+        }
+    }
+    echo "No se pudo completar la operacion";
+    die();
+}
+
 header('Content-Type: application/json;charset=utf-8');
 $deal_id = $_GET['associatedObjectId'];
 //$deal_id = '16385417769';
-$results = create_list($deal_id);
+$results = mainp($deal_id, $db_cont, $portal_id);
 echo json_encode($results);

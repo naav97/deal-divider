@@ -6,9 +6,9 @@ $portal_id = $_GET['portalId'];
 
 $env = parse_ini_file('.env');
 
-$db_cont = new DBController($env['DB_PASS']);
+$db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
 
-$hs_controller = new HubspotController($db_cont->getToken($portal_id));
+$hs_controller = new HubspotController($db_cont->getProperty($portal_id, "OAToken"));
 
 
 
@@ -19,14 +19,40 @@ $filterData = array_filter($_POST, function ($val) {
 $contactos = [];
 $line_items = [];
 
-$url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
+function fisrtTry($filterData, $hs_controller) {
+    global $contactos, $line_items;
+    $url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
 
-$res = $hs_controller->api_v3($url, $method = "GET");
+    $res = $hs_controller->api_v3($url, $method = "GET");
 
-if ($res['success'] && $res['status'] == 200) {
-    $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
-    $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
+    if ($res['success'] && $res['status'] == 200) {
+        $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
+        $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
+        return "OK";
+    }
+    elseif ($res['success'] && $res['status'] == 401) {
+        return "OT";
+    }
 }
+
+function mainp($filterData, $dbc, $portal_id, $hs_c) {
+    $i = 0;
+    $ret = "";
+    while($i < 3) {
+        $ret = firstTry($filterData, $hs_c);
+        if($ret == "OT") {
+            $dbc->updateToken($portal_id);
+            $i = $i + 1;
+        }
+        else {
+            return $ret;
+        }
+    }
+    echo "No se pudo completar la operacion";
+    die();
+}
+
+mainp($filterData, $db_cont, $portal_id, $hs_controller);
 
 $line_items_ids = [];
 
