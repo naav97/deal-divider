@@ -54,6 +54,7 @@ class DBController {
         else {
             echo "Error al obtener nuevo token<br>";
             print_r($res);
+            print_r($refTok);
             die();
         }
         $conn = new mysqli($this->server, $this->duser, $this->db_key, $this->db);
