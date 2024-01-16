@@ -52,7 +52,8 @@ class DBController {
             $newData = json_decode($res['data'], true);
         }
         else {
-            echo "Error al obtener nuevo token";
+            echo "Error al obtener nuevo token<br>";
+            print_r($res);
             die();
         }
         $conn = new mysqli($this->server, $this->duser, $this->db_key, $this->db);
