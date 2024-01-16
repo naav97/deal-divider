@@ -43,7 +43,7 @@ function saveDetailsToDB($pipeRes, $token, $portalId, $refTok) {
     }
     $sql = "INSERT INTO det_client (PortalID, OAToken, RefToken, PipelineID, StageID) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $portalId, $token, $refTok, $pipeid, $stageid);
+    $stmt->bind_param("sssss", $portalId, $token, $refTok, $pipeid, $stageid);
     if($stmt->execute()) {
         echo "<br>Instalacion completada correctamente";
     }
