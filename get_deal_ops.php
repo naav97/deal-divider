@@ -54,6 +54,7 @@ function create_list($deal_id)
 {
     global $hubspot_obj;   
     global $noResults;
+    global $portal_id;
 
     /*Listar documentos*/
     $test_ids = [];
@@ -124,7 +125,7 @@ function create_list($deal_id)
             "type" => "IFRAME",
             "width" => 768,
             "height" => 748,
-            "uri" => "https://colaborador.grows.pro/deal-divider/get_form_cuotas.php?&deal_id=" . $deal_id,
+            "uri" => "https://colaborador.grows.pro/deal-divider/get_form_cuotas.php?&deal_id=".$deal_id."&portalId=".$portal_id,
             "label" => "Dividir negocio"
         );
     }

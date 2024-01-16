@@ -2,8 +2,6 @@
 include_once 'controller/HubspotController.php';
 include_once 'controller/DBController.php';
 
-$portal_id = $_GET['portalId'];
-
 $env = parse_ini_file('.env');
 
 $db_cont = new DBController($env['DB_PASS'], $env['CLIENT_ID'], $env['CLIENT_SECRET']);
@@ -16,6 +14,7 @@ $filterData = array_filter($_POST, function ($val) {
 	return !empty($val);
 });
 
+$portal_id = $filterData['portal_id'];
 $contactos = [];
 $line_items = [];
 

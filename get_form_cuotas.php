@@ -109,6 +109,7 @@ $propD = mainp($deal_id, $db_cont, $portal_id, $hubspot_obj);
             <input id="imp-cuo" type="hidden" value="<?php echo $propD['cuotas']; ?>" name="deal_num_cuo">
             <input id="imp-amo" type="hidden" value="<?php echo $propD['amount']; ?>" name="deal_amo">
             <input type="hidden" value="<?php echo $propD['dealstage']; ?>" name="deal_stage">
+            <input type="hidden" value="<?php echo $portal_id; ?>" name="portal_id">
             <table class="table">
                 <thead>
                     <tr>
