@@ -59,7 +59,7 @@ class DBController {
         if($conn->connect_error) {
             die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
         }
-        $sql = "UPDATE det_client SET OAToken='?', RefToken='?' WHERE PortalID='?'";
+        $sql = "UPDATE det_client SET OAToken=?, RefToken=? WHERE PortalID=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $newData['access_token'], $newData['refresh_token'], $portal_id);
         if($stmt->execute()) {
