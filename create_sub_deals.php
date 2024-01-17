@@ -16,6 +16,8 @@ $line_items = [];
 
 $hs_controller = new HubspotController("Bearer ".$db_cont->getProperty($portal_id, "OAToken"));
 
+$pipeDetails = $db_cont->getPipeDetails($portal_id);
+
 function firstTry($filterData, $hs_controller) {
     global $contactos, $line_items;
     $url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
@@ -160,8 +162,8 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "amount" => $filterData['valor_cuota_'.$i],
             "dealname" => $filterData['deal_name']." cuota # ".$i,
             "closedate" => $filterData['fecha_pago_cuota_'.$i],
-            "pipeline" => "74755618",
-            "dealstage" => "143884940",
+            "pipeline" => $pipeDetails['pipe_id'],
+            "dealstage" => $pipeDetails['stage_id'],
         ],
         "associations" => createAsos($contactos, $new_li, $filterData['deal_id'])
     );

@@ -41,6 +41,30 @@ class DBController {
         return $token;
     }
 
+    function getPipeDetails($portal_id):array {
+        $pipe = "";
+        $stage = "";
+        $conn = new mysqli($this->server, $this->duser, $this->db_key, $this->db);
+        if($conn->connect_error) {
+            die("ERROR al conectarse a la base de datos: ".$conn->connect_error);
+        }
+        $sql = "SELECT PipelineID, StageID FROM det_client WHERE PortalID=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $portal_id);
+        $stmt->execute();
+        $stmt->bind_result($pipe, $stage);
+        $ret = array();
+        if($stmt->fetch()) {
+            $ret = array (
+                "pipe_id" => $pipe,
+                "stage_id" => $stage
+            );
+        }
+        $stmt->close();
+        $conn->close();
+        return $ret;
+    }
+
     function updateToken($portal_id):void {
         $refTok = $this->getProperty($portal_id, "RefToken");
         $url = "https://api.hubapi.com/oauth/v1/token";
