@@ -107,7 +107,7 @@ function create_list($deal_id)
                 $data_2 = json_decode($resp_2['data'], true);
                 $results_2 = $data_2['results'];
                 foreach ($results_2 as $key_2 => $item_2) {
-                    if(preg_match("/ cuota # /i", $item_2['name'])) {
+                    if(preg_match("/ cuota # /i", $item_2['properties']['dealname'])) {
                         $respond['results'][] = format_results($item_2);
                     } 
                 }
