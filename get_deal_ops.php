@@ -106,7 +106,10 @@ function create_list($deal_id)
             if ($resp_2['success'] && $resp_2['status'] == 200) {
                 $data_2 = json_decode($resp_2['data'], true);
                 $results_2 = $data_2['results'];
-                foreach ($results_2 as $key_2 => $item_2) {
+                $filter_results_2 = array_filter($results_2, function ($result) {
+                    return preg_match("/ cuota # /i", $result['name']);
+                });
+                foreach ($filter_results_2 as $key_2 => $item_2) {
                     $respond['results'][] = format_results($item_2); 
                 }
             } else {
