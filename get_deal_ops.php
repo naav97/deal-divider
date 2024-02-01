@@ -31,7 +31,7 @@ function format_results($item_2) {
     return array(
         "objectId" => $item_2['id'],
         "title" => $item_2['properties']['dealname'],
-        "link" => "https://app.hubspot.com/contacts/21549431/record/0-3/".$item_2['properties']['hs_object_id'],
+        "link" => "https://app.hubspot.com/contacts/".$portal_id."/record/0-3/".$item_2['properties']['hs_object_id'],
         "created" => created_date_format($item_2['properties']['createdate']),
         "priority" => "LOW",
         "properties" => array(
