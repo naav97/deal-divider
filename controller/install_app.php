@@ -26,7 +26,7 @@ function saveDetailsToDB($pipeRes, $token, $portalId, $refTok) {
     $pipeid = $data['id'];
     $stageid = "";
     foreach($data['stages'] as &$st) {
-        if($st['label'] == "Factura emitida") {
+        if($st['label'] == "Factura por emitir") {
             $stageid = $st['id'];
             break;
         }

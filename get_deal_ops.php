@@ -27,7 +27,7 @@ function created_date_format($date) {
     return $date_format;
 }
 
-function format_results($item_2) {
+function format_results($item_2, $portal_id) {
     return array(
         "objectId" => $item_2['id'],
         "title" => $item_2['properties']['dealname'],
@@ -108,7 +108,7 @@ function create_list($deal_id)
                 $results_2 = $data_2['results'];
                 foreach ($results_2 as $key_2 => $item_2) {
                     if(preg_match("/ cuota # /i", $item_2['properties']['dealname'])) {
-                        $respond['results'][] = format_results($item_2);
+                        $respond['results'][] = format_results($item_2, $portal_id);
                     } 
                 }
             } else {
