@@ -159,7 +159,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
         "properties" => [
             "amount" => $filterData['valor_cuota_'.$i],
             "dealname" => $filterData['deal_name']." cuota # ".$i,
-            "closedate" => $filterData['fecha_pago_cuota_'.$i],
+            "closedate" => date_format(date_modify(date_create($filterData['fecha_pago_cuota_'.$i]), '+1 day'), 'Y-m-d\\TH:i:s.vP'),
             "pipeline" => $pipeDetails['pipe_id'],
             "dealstage" => $pipeDetails['stage_id'],
         ],
