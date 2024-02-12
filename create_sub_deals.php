@@ -182,6 +182,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "closedate" => date_format(date_modify(date_create($filterData['fecha_pago_cuota_'.$i]), '+1 day'), 'Y-m-d\\TH:i:s.vP'),
             "pipeline" => $pipeDetails['pipe_id'],
             "dealstage" => $pipeDetails['stage_id'],
+            "deal_currency_code" => $filterData['currency'],
         ],
         "associations" => createAsos($contactos, $new_li, $empresas, $filterData['deal_id'])
     );

@@ -21,7 +21,7 @@ function generate_property_params($properties_list) {
 }
 
 function get_deal_props($deal_id, $hubspot_obj) {
-    $deal_params = generate_property_params(["amount","cuotas","dealname","dealstage"]);
+    $deal_params = generate_property_params(["amount","cuotas","dealname","dealstage","deal_currency_code"]);
 
     $urlD = 'https://api.hubapi.com/crm/v3/objects/deals/'.$deal_id.$deal_params.'&archived=false';
 
@@ -110,6 +110,7 @@ $propD = mainp($deal_id, $db_cont, $portal_id, $hubspot_obj);
             <input id="imp-amo" type="hidden" value="<?php echo $propD['amount']; ?>" name="deal_amo">
             <input type="hidden" value="<?php echo $propD['dealstage']; ?>" name="deal_stage">
             <input type="hidden" value="<?php echo $portal_id; ?>" name="portal_id">
+            <input type="hidden" value="<?php echo $propD['deal_currency_code']; ?>" name="currency">
             <table class="table">
                 <thead>
                     <tr>
