@@ -29,7 +29,7 @@ function firstTry($filterData, $hs_controller) {
         $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
         $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
         $empresas = array_filter(json_decode($res['data'], true)['associations']['companies']['results'], function ($emp) {
-            return $val['type'] == "deal_to_company";
+            return $emp['type'] == "deal_to_company";
         });
         return "OK";
     }
