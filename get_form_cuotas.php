@@ -119,6 +119,7 @@ $propD = mainp($deal_id, $db_cont, $portal_id, $hubspot_obj);
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $initDate = new DateTime(date('Y-m-d')); ?>
                     <?php for ($i = 1; $i <= $propD['cuotas']; $i++) { ?>
                     <tr>
                         <td>
@@ -129,9 +130,10 @@ $propD = mainp($deal_id, $db_cont, $portal_id, $hubspot_obj);
                         </td>
                         <!-- <span>Fecha de pago</span> -->
                         <td>
-                            <input class="private-form__control" type="date" name="fecha_pago_cuota_<?php echo $i; ?>">
+                        <input class="private-form__control" type="date" name="fecha_pago_cuota_<?php echo $i; ?>" value="<?php echo $initDate->format('Y-m-d'); ?>">
                         </td>
                     </tr>
+                    <?php $initDate->modify('+30 days'); ?>
                     <?php } ?>
                 </tbody>
             </table>
