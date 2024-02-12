@@ -13,20 +13,24 @@ $filterData = array_filter($_POST, function ($val) {
 $portal_id = $filterData['portal_id'];
 $contactos = [];
 $line_items = [];
+$empresas = [];
 
 $hs_controller = new HubspotController("Bearer ".$db_cont->getProperty($portal_id, "OAToken"));
 
 $pipeDetails = $db_cont->getPipeDetails($portal_id);
 
 function firstTry($filterData, $hs_controller) {
-    global $contactos, $line_items;
-    $url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items';
+    global $contactos, $line_items, $empresas;
+    $url = 'https://api.hubapi.com/crm/v3/objects/deals/'.$filterData['deal_id'].'?associations=contact%2Cline_items%2Ccompany';
 
     $res = $hs_controller->api_v3($url, $method = "GET");
 
     if ($res['success'] && $res['status'] == 200) {
         $contactos = json_decode($res['data'], true)['associations']['contacts']['results'];
         $line_items = json_decode($res['data'], true)['associations']['line items']['results'];
+        $empresas = array_filter(json_decode($res['data'], true)['associations']['companies']['results'], function ($emp) {
+            return $val['type'] == "deal_to_company";
+        });
         return "OK";
     }
     elseif ($res['success'] && $res['status'] == 401) {
@@ -98,7 +102,7 @@ function createLineItems($li_d, $hs_c) {
     return $new_li;
 }
 
-function createAsos($conts, $liit, $dealId) {
+function createAsos($conts, $liit, $emps, $dealId) {
     $jsonres = array();
 
     $padre = array (
@@ -125,6 +129,22 @@ function createAsos($conts, $liit, $dealId) {
 
                     "associationCategory" => "HUBSPOT_DEFINED",
                     "associationTypeId" => 3,
+                ],
+            ],
+        );
+
+        array_push($jsonres, $struct);
+    }
+
+    foreach ($emps as &$emp) {
+        $struct = array (
+            "to" => [
+                "id" => $emp['id'],
+            ],
+            "types" => [
+                [
+                    "associationCategory" => "HUBSPOT_DEFINED",
+                    "associationTypeId" => 5,
                 ],
             ],
         );
@@ -163,7 +183,7 @@ for ($i = 1; $i <= $filterData['deal_num_cuo']; $i++) {
             "pipeline" => $pipeDetails['pipe_id'],
             "dealstage" => $pipeDetails['stage_id'],
         ],
-        "associations" => createAsos($contactos, $new_li, $filterData['deal_id'])
+        "associations" => createAsos($contactos, $new_li, $empresas, $filterData['deal_id'])
     );
     $res_cre_deal = $hs_controller->api_v3($url_cre_deal, $method = "POST", $data = $deal);
     if ($res_cre_deal['success'] && $res_cre_deal['status'] == 201) {
